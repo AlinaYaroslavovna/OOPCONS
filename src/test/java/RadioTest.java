@@ -1,87 +1,40 @@
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class RadioTest {
-    private Radio radio;
-
-    @BeforeEach
-    void setUp() {
-        radio = new Radio();
-    }
+public class RadioTest {
 
     @Test
-    void testInitialStationAndVolume() {
-        assertEquals(0, radio.getCurrentStation());
-        assertEquals(0, radio.getCurrentVolume());
-    }
-
-    @Test
-    void testSetCurrentStationValid() {
-        radio.setCurrentStation(5);
-        assertEquals(5, radio.getCurrentStation());
-    }
-
-    @Test
-    void testSetCurrentStationInvalid() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            radio.setCurrentStation(10);
-        });
-        assertEquals("Station must be between 0 and 9", exception.getMessage());
-
-        exception = assertThrows(IllegalArgumentException.class, () -> {
-            radio.setCurrentStation(-1);
-        });
-        assertEquals("Station must be between 0 and 9", exception.getMessage());
-    }
-
-    @Test
-    void testNextStation() {
-        radio.setCurrentStation(8);
-        radio.next();
-        assertEquals(9, radio.getCurrentStation());
-
-        radio.next();
+    public void testNextStation() {
+        Radio radio = new Radio(10);
+        radio.nextStation();
+        assertEquals(1, radio.getCurrentStation());
+        for (int i = 0; i < 9; i++) {
+            radio.nextStation();
+        }
         assertEquals(0, radio.getCurrentStation());
     }
 
     @Test
-    void testPrevStation() {
-        radio.setCurrentStation(1);
-        radio.prev();
-        assertEquals(0, radio.getCurrentStation());
-
+    public void testPrevStation() {
+        Radio radio = new Radio(10);
         radio.setCurrentStation(0);
-        radio.prev();
+        radio.prevStation();
         assertEquals(9, radio.getCurrentStation());
     }
 
     @Test
-    void testIncreaseVolume() {
-        radio.increaseVolume();
-        assertEquals(1, radio.getCurrentVolume());
-
-        for (int i = 0; i < 99; i++) {
+    public void testVolumeIncrease() {
+        Radio radio = new Radio();
+        for (int i = 0; i < 101; i++) {
             radio.increaseVolume();
         }
-        assertEquals(100, radio.getCurrentVolume());
-
-        radio.increaseVolume(); // Попытка увеличить громкость выше 100
-        assertEquals(100, radio.getCurrentVolume());
+        assertEquals(100, radio.getVolume());
     }
 
     @Test
-    void testDecreaseVolume() {
-        for (int i = 0; i < 50; i++) {
-            radio.increaseVolume();
-        }
-
-        for (int i = 0; i < 50; i++) {
-            radio.decreaseVolume();
-        }
-
-        assertEquals(0, radio.getCurrentVolume());
-        radio.decreaseVolume(); // Попытка уменьшить громкость ниже 0
-        assertEquals(0, radio.getCurrentVolume());
+    public void testVolumeDecrease() {
+        Radio radio = new Radio();
+        radio.decreaseVolume();
+        assertEquals(0, radio.getVolume());
     }
 }
