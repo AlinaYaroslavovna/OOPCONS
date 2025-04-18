@@ -1,10 +1,40 @@
 public class Radio {
-    private int currentStation; // Номер текущей радиостанции
-    private int currentVolume;   // Уровень громкости
+    private int currentStation;
+    private int volume;
+    private final int maxStations;
+    private final int MAX_VOLUME = 100;
+    private final int MIN_VOLUME = 0;
 
+    // Конструктор с параметром
+    public Radio(int maxStations) {
+        this.maxStations = maxStations;
+        this.currentStation = 0; // Начинаем с первой станции
+        this.volume = 0; // Начинаем с минимальной громкости
+    }
+
+    // Конструктор по умолчанию
     public Radio() {
-        this.currentStation = 0; // Начальная станция
-        this.currentVolume = 0;   // Начальная громкость
+        this(10); // По умолчанию 10 станций
+    }
+
+    public void nextStation() {
+        currentStation = (currentStation + 1) % maxStations;
+    }
+
+    public void prevStation() {
+        currentStation = (currentStation - 1 + maxStations) % maxStations;
+    }
+
+    public void increaseVolume() {
+        if (volume < MAX_VOLUME) {
+            volume++;
+        }
+    }
+
+    public void decreaseVolume() {
+        if (volume > MIN_VOLUME) {
+            volume--;
+        }
     }
 
     public int getCurrentStation() {
@@ -12,42 +42,12 @@ public class Radio {
     }
 
     public void setCurrentStation(int station) {
-        if (station >= 0 && station <= 9) {
-            this.currentStation = station;
-        } else {
-            throw new IllegalArgumentException("Station must be between 0 and 9");
+        if (station >= 0 && station < maxStations) {
+            currentStation = station;
         }
     }
 
-    public void next() {
-        if (currentStation == 9) {
-            currentStation = 0; // Переключение на нулевую станцию
-        } else {
-            currentStation++; // Переключение на следующую станцию
-        }
-    }
-
-    public void prev() {
-        if (currentStation == 0) {
-            currentStation = 9; // Переключение на девятую станцию
-        } else {
-            currentStation--; // Переключение на предыдущую станцию
-        }
-    }
-
-    public int getCurrentVolume() {
-        return currentVolume;
-    }
-
-    public void increaseVolume() {
-        if (currentVolume < 100) {
-            currentVolume++;
-        }
-    }
-
-    public void decreaseVolume() {
-        if (currentVolume > 0) {
-            currentVolume--;
-        }
+    public int getVolume() {
+        return volume;
     }
 }
